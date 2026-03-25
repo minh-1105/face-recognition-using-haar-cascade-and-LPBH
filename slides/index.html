@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Haar Cascade Deck</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="deck-stage">
+        <main class="deck-frame" aria-live="polite">
+          <section class="slide slide-intro active" data-slide="1">
+            <div class="slide-grid intro-grid">
+              <div class="eyebrow">Assignment Group · Computer Vision</div>
+              <div class="intro-kicker">Thuật toán phát hiện khuôn mặt</div>
+              <h1>Haar Cascade<br />trong ứng dụng điểm danh</h1>
+              <p class="lede">
+              </p>
+              <div class="intro-meta">
+                <span>Nhóm 7</span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+            <div class="accent-rail">
+              <span>01</span>
+              <span>INTRO</span>
+            </div>
+          </section>
+
+          <section class="slide" data-slide="2">
+            <div class="slide-grid two-column">
+              <div>
+                <div class="eyebrow">Haar Cascade</div>
+                <h2>Haar Cascade là gì?</h2>
+                <p class="body-copy">
+                  Đây là thuật toán phát hiện đối tượng cổ điển của OpenCV,
+                  thường dùng để tìm khuôn mặt trên ảnh xám theo thời gian thực.
+                </p>
+                <ul class="bullet-list">
+                  <li>Quét nhiều cửa sổ nhỏ trên toàn bộ khung hình.</li>
+                  <li>Đo sự khác biệt sáng tối bằng các đặc trưng hình chữ nhật.</li>
+                  <li>Trả về vùng nào “giống mặt” trước khi bước nhận diện bắt đầu.</li>
+                </ul>
+              </div>
+              <div class="visual-stack">
+                <div class="feature-card">
+                  <div class="mini-label">Ý tưởng cốt lõi</div>
+                  <p>
+                    Khuôn mặt có cấu trúc sáng tối khá ổn định:
+                    vùng mắt thường tối hơn má, sống mũi sáng hơn hai bên.
+                  </p>
+                </div>
+                <div class="haar-diagram">
+                  <div class="haar-box split-vertical">
+                    <span class="dark"></span>
+                    <span class="light"></span>
+                  </div>
+                  <div class="haar-box split-horizontal">
+                    <span class="dark"></span>
+                    <span class="light"></span>
+                  </div>
+                  <div class="haar-box triple">
+                    <span class="light"></span>
+                    <span class="dark"></span>
+                    <span class="light"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accent-rail">
+              <span>02</span>
+              <span>CONCEPT</span>
+            </div>
+          </section>
+
+          <section class="slide" data-slide="3">
+            <div class="slide-grid split-wide">
+              <div>
+                <div class="eyebrow">Core Mechanics</div>
+                <h2>Đặc trưng Haar và Integral Image</h2>
+              </div>
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <div class="metric-label">Haar-like feature</div>
+                  <p>
+                    Mỗi đặc trưng so sánh tổng cường độ giữa các vùng sáng và tối
+                    để mô tả cạnh, đường hoặc vùng trung tâm.
+                  </p>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Integral image</div>
+                  <p>
+                    Ảnh tích phân giúp tính tổng điểm ảnh của một hình chữ nhật
+                    chỉ với 4 phép truy xuất, thay vì cộng từng pixel.
+                  </p>
+                </div>
+              </div>
+              <div class="formula-strip">
+                <span>sum(rect) = D - B - C + A</span>
+                <span>Tăng tốc cho hàng nghìn phép kiểm tra trên mỗi frame</span>
+              </div>
+              <div class="integral-demo">
+                <div class="corner a">A</div>
+                <div class="corner b">B</div>
+                <div class="corner c">C</div>
+                <div class="corner d">D</div>
+                <div class="rect-highlight"></div>
+              </div>
+            </div>
+            <div class="accent-rail">
+              <span>03</span>
+              <span>FEATURES</span>
+            </div>
+          </section>
+
+          <section class="slide" data-slide="4">
+            <div class="slide-grid process-layout">
+              <div>
+                <div class="eyebrow">Training</div>
+                <h2>AdaBoost chọn ra các đặc trưng hữu ích</h2>
+              </div>
+              <div class="process-line">
+                <div class="process-step">
+                  <span class="step-index">01</span>
+                  <h3>Dữ liệu dương / âm</h3>
+                  <p>Ảnh có mặt và ảnh không có mặt được dùng để huấn luyện.</p>
+                </div>
+                <div class="process-step">
+                  <span class="step-index">02</span>
+                  <h3>Nhiều feature ứng viên</h3>
+                  <p>Hàng nghìn đặc trưng được sinh ra trên các kích thước khác nhau.</p>
+                </div>
+                <div class="process-step">
+                  <span class="step-index">03</span>
+                  <h3>AdaBoost lọc</h3>
+                  <p>Giữ lại một tập nhỏ feature phân biệt tốt nhất giữa mặt và nền.</p>
+                </div>
+                <div class="process-step">
+                  <span class="step-index">04</span>
+                  <h3>Tạo weak classifiers</h3>
+                  <p>Mỗi feature đi kèm một ngưỡng quyết định đơn giản.</p>
+                </div>
+              </div>
+              <div class="callout-row">
+                <div class="callout">
+                  Kết quả: mô hình không dùng toàn bộ feature, chỉ giữ vài feature
+                  “đáng tiền” để phát hiện nhanh hơn.
+                </div>
+              </div>
+            </div>
+            <div class="accent-rail">
+              <span>04</span>
+              <span>TRAINING</span>
+            </div>
+          </section>
+
+          <section class="slide" data-slide="5">
+            <div class="slide-grid two-column">
+              <div>
+                <div class="eyebrow">Detection Pipeline</div>
+                <h2>Tại sao gọi là “Cascade”?</h2>
+                <ul class="bullet-list spacious">
+                  <li>Từng cửa sổ ảnh đi qua nhiều tầng kiểm tra nối tiếp.</li>
+                  <li>Tầng đầu rất nhẹ để loại nhanh phần lớn vùng không phải mặt.</li>
+                  <li>Chỉ các cửa sổ tiềm năng mới được gửi sang tầng sau.</li>
+                  <li>Càng về sau, phép kiểm tra càng chặt và tốn công hơn.</li>
+                </ul>
+              </div>
+              <div class="cascade-panel">
+                <div class="stage-bar"><span>Stage 1</span><em>reject fast</em></div>
+                <div class="stage-bar"><span>Stage 2</span><em>filter harder</em></div>
+                <div class="stage-bar"><span>Stage 3</span><em>verify</em></div>
+                <div class="stage-bar final"><span>Face</span><em>keep region</em></div>
+                <div class="pros-cons">
+                  <p><strong>Ưu điểm:</strong> nhanh, gọn, phù hợp máy yếu.</p>
+                  <p><strong>Hạn chế:</strong> nhạy với góc nghiêng, ánh sáng và che khuất.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accent-rail">
+              <span>05</span>
+              <span>CASCADE</span>
+            </div>
+          </section>
+
+          <section class="slide" data-slide="6">
+            <div class="slide-grid pipeline-layout">
+              <div>
+                <div class="eyebrow">Application Overview</div>
+                <h2>Ứng dụng này dùng Haar Cascade ở đâu?</h2>
+              </div>
+              <div class="pipeline-row">
+                <div class="pipe-node">RTSP / Webcam</div>
+                <div class="pipe-arrow"></div>
+                <div class="pipe-node">Tiền xử lý ảnh</div>
+                <div class="pipe-arrow"></div>
+                <div class="pipe-node accent">Haar Cascade<br />phát hiện mặt</div>
+                <div class="pipe-arrow"></div>
+                <div class="pipe-node">LBPH nhận diện</div>
+                <div class="pipe-arrow"></div>
+                <div class="pipe-node">Ghi CSV điểm danh</div>
+              </div>
+              <p class="body-copy wide-note">
+                Trong code hiện tại, Haar Cascade chỉ làm nhiệm vụ tìm vị trí khuôn mặt.
+                Sau đó vùng mặt được tiền xử lý và chuyển sang LBPH để nhận diện sinh viên.
+              </p>
+            </div>
+            <div class="accent-rail">
+              <span>06</span>
+              <span>PIPELINE</span>
+            </div>
+          </section>
+
+          <section class="slide" data-slide="7">
+            <div class="slide-grid workflow-layout">
+              <div>
+                <div class="eyebrow">App Usage</div>
+                <h2>Luồng sử dụng rất ngắn gọn</h2>
+              </div>
+              <div class="workflow-grid">
+                <div class="workflow-card">
+                  <span>01</span>
+                  <h3>Mở camera</h3>
+                  <p>Nhập RTSP hoặc dùng webcam laptop.</p>
+                </div>
+                <div class="workflow-card">
+                  <span>02</span>
+                  <h3>Đăng ký sinh viên</h3>
+                  <p>Nhập MSSV, họ tên, chụp hoặc import ảnh.</p>
+                </div>
+                <div class="workflow-card">
+                  <span>03</span>
+                  <h3>Train model</h3>
+                  <p>LBPH học từ dataset và labels đã lưu.</p>
+                </div>
+                <div class="workflow-card">
+                  <span>04</span>
+                  <h3>Điểm danh realtime</h3>
+                  <p>Phát hiện mặt, nhận diện và ghi file CSV theo ngày.</p>
+                </div>
+              </div>
+              <div class="footer-note">
+                Giao diện hiện tại được viết bằng Tkinter để demo trực tiếp quy trình.
+              </div>
+            </div>
+            <div class="accent-rail">
+              <span>07</span>
+              <span>USAGE</span>
+            </div>
+          </section>
+
+          <section class="slide" data-slide="8">
+            <div class="slide-grid outro-layout">
+              <div class="eyebrow">Takeaway</div>
+              <h2>Điểm cần nhớ</h2>
+              <div class="takeaway-list">
+                <div class="takeaway-item">
+                  <span>01</span>
+                  <p>Haar Cascade mạnh ở tốc độ phát hiện khuôn mặt theo thời gian thực.</p>
+                </div>
+                <div class="takeaway-item">
+                  <span>02</span>
+                  <p>Thuật toán dùng đặc trưng sáng tối, integral image và nhiều tầng cascade.</p>
+                </div>
+                <div class="takeaway-item">
+                  <span>03</span>
+                  <p>Trong ứng dụng điểm danh này, nó là bước mở đầu trước khi LBPH nhận diện.</p>
+                </div>
+              </div>
+              <div class="closing-line">
+                Một giải pháp cổ điển, dễ triển khai, phù hợp demo học phần và máy cấu hình vừa phải.
+              </div>
+            </div>
+            <div class="accent-rail">
+              <span>08</span>
+              <span>SUMMARY</span>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <footer class="deck-footer">
+        <div class="footer-left">Dùng phím ← →, Space hoặc click hai nửa màn hình để chuyển slide</div>
+        <div class="footer-right">
+          <span id="slide-counter">1 / 8</span>
+        </div>
+      </footer>
+
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
